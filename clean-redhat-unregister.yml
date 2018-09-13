@@ -1,0 +1,9 @@
+---
+- hosts: nodes
+  tasks:
+  - name: Unsubscribe
+    shell: subscription-manager unsubscribe --all
+  - name: Unregister
+    shell: subscription-manager unregister
+  - name: Clean
+    shell: subscription-manager clean

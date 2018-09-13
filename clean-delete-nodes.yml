@@ -1,0 +1,26 @@
+- name: Poweroff OpenShift Nodes
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Poweroff nodes in target vCenter
+      vmware_guest_powerstate:
+        hostname: "{{ vcenter_ip }}"
+        username: "{{ vcenter_user }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: False
+        name: "{{ hostvars[item]['hostname'] }}.{{ domain_name }}"
+        folder: "{{ vcenter_folder }}"
+        state: powered-off
+      delegate_to: localhost
+      register: deploy
+      with_items: "{{ groups['nodes'] }}"
+    - name: Delete nodes from disk
+      vmware_guest:
+        hostname: "{{ vcenter_ip }}"
+        username: "{{ vcenter_user }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: False
+        name: "{{ hostvars[item]['hostname'] }}.{{ domain_name }}"
+        state: absent
+      with_items: "{{ groups['nodes'] }}"

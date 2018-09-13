@@ -1,0 +1,3 @@
+---
+- import_playbook: ./clean-redhat-unregister.yml
+- import_playbook: ./clean-delete-nodes.yml
